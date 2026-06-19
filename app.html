@@ -1,0 +1,356 @@
+<!doctype html>
+<html lang="en" class="transition-colors duration-300">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>AuraTask</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+      tailwind.config = {
+        darkMode: "class",
+        theme: {
+          extend: {
+            colors: {
+              brand: {
+                light: "#6366f1",
+                dark: "#818cf8",
+              },
+            },
+            fontFamily: {
+              sans: ["Inter", "sans-serif"],
+            },
+          },
+        },
+      };
+    </script>
+    <!-- Google Fonts & FontAwesome for icons -->
+    <link
+      href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap"
+      rel="stylesheet"
+    />
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"
+    />
+    <link rel="stylesheet" href="/styles.css">
+  </head>
+  <body
+    class="bg-slate-50 dark:bg-zinc-950 text-slate-800 dark:text-zinc-100 min-h-screen bg-grid transition-colors duration-300"
+  >
+    <!-- Header / Navigation -->
+    <header
+      class="sticky top-0 z-50 backdrop-blur-md bg-white/70 dark:bg-zinc-900/70 border-b border-slate-200 dark:border-zinc-800/80 transition-colors duration-300"
+    >
+      <div
+        class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-16 flex items-center justify-between"
+      >
+        <div class="flex items-center space-x-3">
+          <div
+            class="h-10 w-10 rounded-xl bg-gradient-to-tr from-indigo-600 to-violet-500 flex items-center justify-center text-white shadow-lg shadow-indigo-500/25"
+          >
+            <i class="fa-solid fa-square-check text-xl"></i>
+          </div>
+          <div>
+            <h1
+              class="text-xl font-bold tracking-tight bg-clip-text text-transparent bg-gradient-to-r from-indigo-600 to-violet-500 dark:from-indigo-400 dark:to-violet-400"
+            >
+              AuraTask
+            </h1>
+            <p class="text-xs text-slate-500 dark:text-zinc-400 font-medium">
+              Interactive Task Ecosystem
+            </p>
+          </div>
+        </div>
+
+        <!-- Theme Toggle & Stats Panel -->
+        <div class="flex items-center space-x-4">
+          <!-- Current Theme Display Badge -->
+          <div
+            id="theme-badge"
+            class="hidden md:flex items-center space-x-1.5 px-3 py-1 rounded-full text-xs font-semibold border transition-all duration-300"
+          >
+            <span
+              class="w-2 h-2 rounded-full animate-pulse"
+              id="theme-pulse"
+            ></span>
+            <span id="theme-text">Light Theme</span>
+          </div>
+
+          <button
+            id="theme-toggle"
+            class="p-2.5 rounded-xl bg-slate-100 dark:bg-zinc-800 hover:bg-slate-200 dark:hover:bg-zinc-700 transition-all duration-200 focus:outline-none"
+            aria-label="Toggle Theme"
+          >
+            <i
+              id="theme-icon"
+              class="fa-solid fa-sun text-amber-500 text-lg"
+            ></i>
+          </button>
+        </div>
+      </div>
+    </header>
+
+    <!-- Main Content Grid -->
+    <main class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+      <div class="grid grid-cols-1 lg:grid-cols-12 gap-8">
+        <!-- LEFT SECTION: Creator Panel, Tokenizer, & Live Flow Diagram -->
+        <div class="lg:col-span-5 space-y-8">
+          <!-- Task Creator Card -->
+          <div
+            class="bg-white dark:bg-zinc-900 rounded-2xl p-6 shadow-sm border border-slate-100 dark:border-zinc-800/80 transition-all"
+          >
+            <div class="flex items-center justify-between mb-6">
+              <div class="flex items-center space-x-2">
+                <span
+                  class="p-2 bg-indigo-50 dark:bg-indigo-950/40 text-indigo-600 dark:text-indigo-400 rounded-lg"
+                >
+                  <i class="fa-solid fa-plus"></i>
+                </span>
+                <h2 class="text-lg font-bold">Create Task</h2>
+              </div>
+              <span
+                id="form-action-badge"
+                class="px-2.5 py-0.5 rounded-full text-2xs font-semibold bg-emerald-50 text-emerald-600 dark:bg-emerald-950/40 dark:text-emerald-400"
+              >
+                Ready
+              </span>
+            </div>
+
+            <!-- Task Creation Form -->
+            <form id="task-form" class="space-y-4">
+              <input type="hidden" id="edit-task-id" value="" />
+
+              <div>
+                <label
+                  for="task-title"
+                  class="block text-xs font-semibold text-slate-600 dark:text-zinc-400 uppercase tracking-wider mb-1.5"
+                  >Task Title *</label
+                >
+                <input
+                  type="text"
+                  id="task-title"
+                  required
+                  placeholder="e.g., Complete UI Redesign"
+                  class="w-full px-4 py-2.5 rounded-xl border border-slate-200 dark:border-zinc-800 bg-slate-50 dark:bg-zinc-950 focus:ring-2 focus:ring-indigo-500/20 focus:border-indigo-500 focus:outline-none transition-all placeholder:text-slate-400 dark:placeholder:text-zinc-600"
+                />
+              </div>
+
+              <div>
+                <label
+                  for="task-desc"
+                  class="block text-xs font-semibold text-slate-600 dark:text-zinc-400 uppercase tracking-wider mb-1.5"
+                  >Description (Optional)</label
+                >
+                <textarea
+                  id="task-desc"
+                  rows="3"
+                  placeholder="Describe the objectives, deadlines, or details..."
+                  class="w-full px-4 py-2.5 rounded-xl border border-slate-200 dark:border-zinc-800 bg-slate-50 dark:bg-zinc-950 focus:ring-2 focus:ring-indigo-500/20 focus:border-indigo-500 focus:outline-none transition-all resize-none placeholder:text-slate-400 dark:placeholder:text-zinc-600"
+                ></textarea>
+              </div>
+
+              <!-- Priority & Category Selection Row -->
+              <div class="grid grid-cols-2 gap-4">
+                <div>
+                  <label
+                    for="task-priority"
+                    class="block text-xs font-semibold text-slate-600 dark:text-zinc-400 uppercase tracking-wider mb-1.5"
+                    >Priority</label
+                  >
+                  <select
+                    id="task-priority"
+                    class="w-full px-3 py-2.5 rounded-xl border border-slate-200 dark:border-zinc-800 bg-slate-50 dark:bg-zinc-950 focus:ring-2 focus:ring-indigo-500/20 focus:border-indigo-500 focus:outline-none transition-all"
+                  >
+                    <option value="low">🟢 Low</option>
+                    <option value="medium" selected>🟡 Medium</option>
+                    <option value="high">🔴 High</option>
+                  </select>
+                </div>
+                <div>
+                  <label
+                    for="task-category-select"
+                    class="block text-xs font-semibold text-slate-600 dark:text-zinc-400 uppercase tracking-wider mb-1.5"
+                    >Primary Group</label
+                  >
+                  <select
+                    id="task-category-select"
+                    class="w-full px-3 py-2.5 rounded-xl border border-slate-200 dark:border-zinc-800 bg-slate-50 dark:bg-zinc-950 focus:ring-2 focus:ring-indigo-500/20 focus:border-indigo-500 focus:outline-none transition-all"
+                  >
+                    <option value="Work">💼 Work</option>
+                    <option value="Personal">🏡 Personal</option>
+                    <option value="Finance">💳 Finance</option>
+                    <option value="Health">💪 Health</option>
+                    <option value="Other">✨ Other</option>
+                  </select>
+                </div>
+              </div>
+
+              <!-- Tokenization System (Custom Tags/Tokens Input) -->
+              <div>
+                <label
+                  class="block text-xs font-semibold text-slate-600 dark:text-zinc-400 uppercase tracking-wider mb-1.5"
+                >
+                  Sub-Task Tokens (Press Enter or Comma to add)
+                </label>
+                <div
+                  class="border border-slate-200 dark:border-zinc-800 rounded-xl p-2 bg-slate-50 dark:bg-zinc-950 transition-all"
+                >
+                  <!-- Token Container (dynamically injected list of chips) -->
+                  <div
+                    id="token-container"
+                    class="flex flex-wrap gap-1.5 items-center"
+                  >
+                    <!-- Input resides inside the flow-container for seamless typing -->
+                    <input
+                      type="text"
+                      id="token-input"
+                      placeholder="add keyword..."
+                      class="flex-1 min-w-[120px] bg-transparent outline-none border-none py-1 px-2 text-sm text-slate-700 dark:text-zinc-200 placeholder:text-slate-400 dark:placeholder:text-zinc-600"
+                    />
+                  </div>
+                </div>
+              </div>
+
+              <!-- Submission Button -->
+              <div class="flex gap-2 pt-2">
+                <button
+                  type="submit"
+                  id="submit-btn"
+                  class="flex-1 py-3 px-4 rounded-xl bg-gradient-to-r from-indigo-600 to-indigo-500 hover:from-indigo-500 hover:to-indigo-600 text-white font-semibold text-sm shadow-md shadow-indigo-500/10 hover:shadow-indigo-500/20 active:scale-[0.98] transition-all flex items-center justify-center space-x-2"
+                >
+                  <i class="fa-solid fa-plus-circle" id="submit-icon"></i>
+                  <span id="submit-text">Add Task Card</span>
+                </button>
+                <button
+                  type="button"
+                  id="cancel-edit-btn"
+                  class="hidden px-4 rounded-xl border border-slate-200 dark:border-zinc-800 hover:bg-slate-100 dark:hover:bg-zinc-800 text-sm font-semibold transition-all"
+                  title="Cancel Edit"
+                >
+                  Cancel
+                </button>
+              </div>
+            </form>
+          </div>
+
+          <!-- Web App LifeCycle SVG-Based Interactive Flow Diagram -->
+        </div>
+
+        <!-- RIGHT SECTION: Ecosystem Status & Interactive Task Grid/List -->
+        <div class="lg:col-span-7 space-y-6">
+          <!-- Controls, Filter & Search Panel -->
+          <div
+            class="bg-white dark:bg-zinc-900 rounded-2xl p-6 shadow-sm border border-slate-100 dark:border-zinc-800/80 transition-all"
+          >
+            <!-- Top stats / header row -->
+            <div class="flex flex-wrap items-center justify-between gap-4 mb-6">
+              <div class="flex items-center space-x-3">
+                <div
+                  class="text-xs font-semibold px-2.5 py-1 rounded-md bg-indigo-50 dark:bg-indigo-950/40 text-indigo-600 dark:text-indigo-400"
+                >
+                  Active Tasks: <span id="stats-total">0</span>
+                </div>
+                <div
+                  class="text-xs font-semibold px-2.5 py-1 rounded-md bg-emerald-50 dark:bg-emerald-950/40 text-emerald-600 dark:text-emerald-400"
+                >
+                  Done: <span id="stats-completed">0</span>
+                </div>
+              </div>
+
+              <!-- Clear All Button -->
+              <button
+                id="clear-all-btn"
+                class="text-xs font-medium text-rose-500 hover:text-rose-600 dark:hover:text-rose-400 transition-colors flex items-center space-x-1 py-1 px-2.5 rounded-lg hover:bg-rose-50 dark:hover:bg-rose-950/30"
+              >
+                <i class="fa-solid fa-trash-can"></i>
+                <span>Clear All Tasks</span>
+              </button>
+            </div>
+
+            <!-- Filters & Search Form Grid -->
+            <div class="grid grid-cols-1 sm:grid-cols-12 gap-3">
+              <!-- Search Bar -->
+              <div class="sm:col-span-5 relative">
+                <span
+                  class="absolute inset-y-0 left-0 pl-3.5 flex items-center pointer-events-none text-slate-400 dark:text-zinc-600"
+                >
+                  <i class="fa-solid fa-magnifying-glass text-xs"></i>
+                </span>
+                <input
+                  type="text"
+                  id="filter-search"
+                  placeholder="Search tasks..."
+                  class="w-full pl-9 pr-4 py-2 rounded-xl text-sm border border-slate-200 dark:border-zinc-800 bg-slate-50 dark:bg-zinc-950 focus:ring-2 focus:ring-indigo-500/20 focus:border-indigo-500 focus:outline-none transition-all placeholder:text-slate-400 dark:placeholder:text-zinc-600"
+                />
+              </div>
+
+              <!-- Status Filter -->
+              <div class="sm:col-span-4">
+                <select
+                  id="filter-status"
+                  class="w-full px-3 py-2 rounded-xl text-sm border border-slate-200 dark:border-zinc-800 bg-slate-50 dark:bg-zinc-950 focus:ring-2 focus:ring-indigo-500/20 focus:border-indigo-500 focus:outline-none transition-all"
+                >
+                  <option value="all">All Statuses</option>
+                  <option value="pending">Pending Only</option>
+                  <option value="completed">Completed Only</option>
+                </select>
+              </div>
+
+              <!-- Priority Filter -->
+              <div class="sm:col-span-3">
+                <select
+                  id="filter-priority"
+                  class="w-full px-3 py-2 rounded-xl text-sm border border-slate-200 dark:border-zinc-800 bg-slate-50 dark:bg-zinc-950 focus:ring-2 focus:ring-indigo-500/20 focus:border-indigo-500 focus:outline-none transition-all"
+                >
+                  <option value="all">All Priorities</option>
+                  <option value="high">🔴 High</option>
+                  <option value="medium">🟡 Medium</option>
+                  <option value="low">🟢 Low</option>
+                </select>
+              </div>
+            </div>
+          </div>
+
+          <!-- Empty State -->
+          <div
+            id="empty-state"
+            class="hidden flex flex-col items-center justify-center text-center p-12 bg-white dark:bg-zinc-900 rounded-2xl border border-slate-100 dark:border-zinc-800/80 transition-all duration-300"
+          >
+            <div
+              class="w-16 h-16 rounded-full bg-slate-100 dark:bg-zinc-800 flex items-center justify-center text-slate-400 dark:text-zinc-500 mb-4 animate-bounce"
+            >
+              <i class="fa-solid fa-seedling text-2xl"></i>
+            </div>
+            <h3
+              class="text-base font-semibold text-slate-700 dark:text-zinc-300"
+            >
+              No tasks in focus
+            </h3>
+            <p class="text-xs text-slate-400 dark:text-zinc-500 mt-1 max-w-xs">
+              Create a fresh task card, attach a few tag tokens, and bring your
+              digital workspace to life.
+            </p>
+          </div>
+
+          <!-- Task Cards Stream -->
+          <div id="task-list" class="space-y-4">
+            <!-- Tasks will be dynamically injected here -->
+          </div>
+        </div>
+      </div>
+    </main>
+
+    <!-- Cnotification Toast -->
+    <div
+      id="toast"
+      class="fixed bottom-6 right-6 z-50 transform translate-y-20 opacity-0 transition-all duration-300 bg-slate-900 dark:bg-white text-white dark:text-zinc-900 px-4 py-3 rounded-xl shadow-xl flex items-center space-x-2 text-xs font-semibold border border-slate-800 dark:border-zinc-200 pointer-events-none"
+    >
+      <span id="toast-icon" class="p-1 rounded-full bg-indigo-500 text-white"
+        ><i class="fa-solid fa-check text-[10px]"></i
+      ></span>
+      <span id="toast-text">System Synced Successfully</span>
+    </div>
+
+    <script src="./app.js"></script>
+  </body>
+</html>
